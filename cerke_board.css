@@ -1,0 +1,105 @@
+body{
+    display: flex;
+    margin-bottom: 0px;
+}
+
+input{
+    width: 80px;
+    height: 30px;
+    margin: 5px;
+}
+
+/* 配置 */
+#playarea{
+    width: 584px;
+}
+
+#environment{
+    display: block;
+    margin: auto auto auto 40px;
+}
+
+#piece_list{
+    border: 1px solid #000000;
+    margin: 20px auto;
+}
+
+#console{
+    margin: 20px auto;
+}
+
+#choice{
+    height: 24px;
+    border-top: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+    padding: 20px;
+}
+
+#rest{
+    width: 330px;
+    display: none;
+}
+
+/* 駒*/
+.piece{
+    width: 51px;
+    height: 51px;
+    padding: 3px;
+}
+
+.reverse{
+    transform: scale(-1);
+}
+
+/* 駒リスト */
+.piece_img{
+    height: 50px;
+    width: 50px;
+    border-top: 1px solid #000000;
+    padding: 3px;
+}
+
+.piece_num{
+    text-align: center;
+    height: 30px;
+    border-bottom: 1px solid black;
+    border-top: 0px 20px;
+    margin: 3px 0px;
+}
+
+/* 盤と手駒 */
+table{
+    border-collapse: collapse;
+}
+
+#board{
+    margin: 2px 0px 15px 0px;
+}
+
+.handspace{
+    height: 65px;
+    width: 550px;
+    padding-bottom: 10px;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: inline-block;
+}
+
+.cell{
+    width: 58px;
+    height: 60px;
+    border: 1px solid #000000;
+}
+
+.tarfe{
+    background-color: #ff9955;
+}
+
+.tanna{
+    background-color: #87cde0;
+}
+
+.tanzo{
+    background-color: #536b53;
+}

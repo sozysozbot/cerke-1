@@ -1,0 +1,43 @@
+<html>
+
+<head>
+    <title>cerke board</title>
+    <link rel="stylesheet" href="cerke_board.css">
+    <script src="./src/cerke_board.js" defer></script>
+</head>
+
+<body>
+    <div id="playarea">
+        <div class="handspace" id="red"></div>
+        <table id="board"></table>
+        <div class="handspace" id="black"></div>
+    </div>
+    <div id="environment">
+        <table id="piece_list">
+            <tr id="pl0"></tr><tr id="pl4"></tr>
+            <tr id="pl1"></tr><tr id="pl5"></tr>
+            <tr id="pl2"></tr><tr id="pl6"></tr>
+            <tr id="pl3"></tr><tr id="pl7"></tr>
+        </table>
+        <p id="choice"></p>
+        <div id="console">
+            <input type="submit" id="send_to_black" value="to black"
+                onclick="if (is_chosen()) send_to_black(choice.innerHTML);" />
+            <input type="submit" id="send_to_red" value="to red"
+                onclick="if (is_chosen()) send_to_red(choice.innerHTML);" />
+            <input type="submit" id="send_to_rest" value="to rest"
+                onclick="if (is_chosen()) send_to_rest(choice.innerHTML);" />
+            <br>
+            <input type="submit" id="rotate" value="rotate" onclick="rotate();" />
+            <input type="submit" id="cancel" value="cancel" onclick="choice.innerHTML='';" />
+            <input type="submit" id="ciurl" value="ciurl" onclick="ciurl()" />
+            <br>
+            <br>
+            <input type="submit" id="init" value="init"
+                onclick="if (window.confirm('官定の初期配置に並べます、よろしいですか？')) init();" />
+        </div>
+        <div id="rest"></div>
+    </div>
+</body>
+
+</html>
