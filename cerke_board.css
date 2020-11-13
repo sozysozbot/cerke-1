@@ -16,7 +16,8 @@ input{
 
 #environment{
     display: block;
-    margin: auto auto auto 40px;
+    margin-top: 55px;
+    margin-left: 40px;
 }
 
 #piece_list{
