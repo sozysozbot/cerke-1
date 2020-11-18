@@ -52,7 +52,6 @@ const places = {
     47: "",
     48: ""
 };
-const base_url = "./pieces";
 const coordinates = [
     "KA", "LA", "NA", "TA", "ZA", "XA", "CA", "MA", "PA",
     "KE", "LE", "TE", "XE", "ME", "PE",
@@ -193,7 +192,8 @@ function init() {
         const piece = document.getElementById(i);
         piece.parentNode.removeChild(piece);
         document.getElementById(coordinates[i]).appendChild(piece);
-        if (i < 24) document.getElementById(i).classList.add("reverse");
+        if (i < 24) piece.classList.add("reverse");
+        else piece.classList.remove("reverse");
         places[i] = coordinates[i];
     }
     for (let i = 0; i < pieces.length; i++) {
@@ -244,7 +244,7 @@ for (let i = 0; i < pieces.length; i++) {
     document.getElementById(pieces[i]).appendChild(newimg);
     newimg.className = "piece";
     newimg.id = i;
-    newimg.src = `${base_url}/${pieces[i]}.png`;
+    newimg.src = `./pieces/${pieces[i]}.png`;
     newimg.addEventListener("click", () => {
         if (is_chosen()) gain(i);
         else choice.innerHTML = i;
