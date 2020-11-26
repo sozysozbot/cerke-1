@@ -22,12 +22,9 @@
         </table>
         <p id="choice"></p>
         <div id="console">
-            <input type="submit" id="send_to_black" value="to black"
-                onclick="if (is_chosen()) send_to_black(choice.innerHTML);" />
-            <input type="submit" id="send_to_red" value="to red"
-                onclick="if (is_chosen()) send_to_red(choice.innerHTML);" />
-            <input type="submit" id="send_to_rest" value="to rest"
-                onclick="if (is_chosen()) send_to_rest(choice.innerHTML);" />
+            <input type="submit" id="send_to_black" value="to black" />
+            <input type="submit" id="send_to_red" value="to red" />
+            <input type="submit" id="send_to_rest" value="to rest" />
             <br>
             <input type="submit" id="rotate" value="rotate" onclick="rotate();" />
             <input type="submit" id="cancel" value="cancel" onclick="choice.innerHTML='';" />
@@ -36,6 +33,8 @@
             <br>
             <input type="submit" id="init" value="init"
                 onclick="if (window.confirm('官定の初期配置に並べます、よろしいですか？')) init();" />
+            <input type="checkbox" id="red_tam_checkbox" name="red_tam">red tam
+            <input type="checkbox" id="mun_checkbox" name="mun">mun
         </div>
         <div id="rest"></div>
     </div>
