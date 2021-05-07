@@ -54,9 +54,6 @@ class Choice {
             document.getElementById("choice").innerHTML = this._innerHTML = value;
         }
     }
-    is_piece_name() {
-        return piece_names.includes(this._innerHTML);
-    }
     piece_element() {
         return document.getElementById(this._innerHTML);
     }
@@ -158,10 +155,9 @@ function sendToBlack(piece_id) {
 }
 function sendToRest(piece_id) {
     const piece = getNth(piece_id);
-    const td_num = document.getElementById(`${pieces[piece_id]}_num`);
     piece.classList.remove("reverse");
     sendTo(pieces[piece_id], piece_id);
-    td_num.innerHTML = `${Number(td_num.innerHTML) + 1}`;
+    piece_counts[pieces[piece_id]].count += 1;
     console.log("rest");
 }
 function spawnTo(dest, piece_id) {

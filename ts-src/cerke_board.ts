@@ -66,10 +66,6 @@ class Choice {
         }
     }
 
-    is_piece_name(): boolean {
-        return (piece_names as ReadonlyArray<string>).includes(this._innerHTML)
-    }
-
     piece_element(): HTMLElement {
         return document.getElementById(this._innerHTML)
     }
@@ -183,10 +179,9 @@ function sendToBlack(piece_id: number) {
 
 function sendToRest(piece_id: number) {
     const piece = getNth(piece_id);
-    const td_num = document.getElementById(`${pieces[piece_id]}_num`);
     piece.classList.remove("reverse");
     sendTo(pieces[piece_id], piece_id);
-    td_num.innerHTML = `${Number(td_num.innerHTML) + 1}`;
+    piece_counts[pieces[piece_id]].count += 1;
     console.log("rest");
 }
 
