@@ -1,67 +1,4 @@
 "use strict";
-// hold places of pieces
-const places = {
-    0: "",
-    1: "",
-    2: "",
-    3: "",
-    4: "",
-    5: "",
-    6: "",
-    7: "",
-    8: "",
-    9: "",
-    10: "",
-    11: "",
-    12: "",
-    13: "",
-    14: "",
-    15: "",
-    16: "",
-    17: "",
-    18: "",
-    19: "",
-    20: "",
-    21: "",
-    22: "",
-    23: "",
-    24: "",
-    25: "",
-    26: "",
-    27: "",
-    28: "",
-    29: "",
-    30: "",
-    31: "",
-    32: "",
-    33: "",
-    34: "",
-    35: "",
-    36: "",
-    37: "",
-    38: "",
-    39: "",
-    40: "",
-    41: "",
-    42: "",
-    43: "",
-    44: "",
-    45: "",
-    46: "",
-    47: "",
-    48: "",
-    49: "",
-    50: "",
-    51: "",
-    52: "",
-    53: "",
-    54: "",
-    55: "",
-    56: "",
-    57: "",
-    58: "",
-    59: "",
-};
 const initial_coord_yhuap = [
     "KA", "LA", "NA", "TA", "ZA", "XA", "CA", "MA", "PA",
     "KE", "LE", "TE", "XE", "ME", "PE",
@@ -82,6 +19,8 @@ const pieces = [
     "rtam", "bmun", "bmun", "bmun", "rmun", "rmun", "rmun",
     "bsaup", "bsaup", "rsaup", "rsaup"
 ];
+// hold places of pieces
+const places = pieces.map(() => "");
 const piece_names = [
     "bnuak", "rnuak",
     "bkauk", "rkauk",
@@ -97,7 +36,34 @@ const piece_names = [
     "bmun", "rmun",
     "bsaup", "rsaup"
 ];
-const choice = document.getElementById("choice");
+class Choice {
+    constructor() {
+        this._innerHTML = "";
+        this._value = null;
+    }
+    get innerHTML() {
+        return this._innerHTML;
+    }
+    set innerHTML(value) {
+        this._innerHTML = value;
+        document.getElementById("choice").innerHTML = value;
+    }
+    set value(value) {
+        if (value === null) {
+            document.getElementById("choice").innerHTML = this._innerHTML = "";
+        }
+        else if (typeof value === "number") {
+            document.getElementById("choice").innerHTML = this._innerHTML = `${value}`;
+        }
+        else {
+            document.getElementById("choice").innerHTML = this._innerHTML = value;
+        }
+    }
+    is_piece_name() {
+        return typeof this._value === "string";
+    }
+}
+const choice = new Choice();
 // return false when the choice is empty
 function isChosen() { return choice.innerHTML !== ""; }
 // move the choice(=piece) to td(=grid)
