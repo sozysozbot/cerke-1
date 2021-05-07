@@ -58,6 +58,10 @@ class Choice {
         return this._innerHTML;
     }
 
+    get value(): null | PieceImgName | number {
+        return this._value;
+    }
+
     set value(value: null | PieceImgName | number) {
         if (value === null) {
             document.getElementById("choice").innerHTML = this._innerHTML = "";
@@ -69,7 +73,7 @@ class Choice {
     }
 
     is_piece_name(): boolean {
-        return typeof this._value === "string"
+        return (piece_names as ReadonlyArray<string>).includes(this._innerHTML)
     }
 }
 
@@ -93,7 +97,7 @@ function move(td: HTMLTableDataCellElement) {
 function gain(target_id: number) { // target is also piece
     const piece = document.getElementById(choice.innerHTML);
     const target = document.getElementById(target_id);
-    if (piece === target || piece_names.includes(choice.innerHTML)) return;
+    if (piece === target || choice.is_piece_name()) return;
 
     piece.parentNode.removeChild(piece);
     target.parentNode.appendChild(piece);
@@ -223,7 +227,7 @@ for (let i = 0; i < row.length; i++) {
             }`;
         newtd.addEventListener("click", (event) => {
             if ((event.target as HTMLElement).tagName !== "IMG" && isChosen()) {
-                if (piece_names.includes(choice.innerHTML)) spawn(newtd);
+                if (choice.is_piece_name()) spawn(newtd);
                 else move(newtd);
             }
         });
@@ -234,21 +238,21 @@ for (let i = 0; i < row.length; i++) {
 // button
 document.getElementById("send_to_red").addEventListener("click", (event) => {
     if (isChosen()) {
-        if (piece_names.includes(choice.innerHTML)) spawnToRed(choice.innerHTML);
+        if (choice.is_piece_name()) spawnToRed(choice.innerHTML);
         else sendToRed(choice.innerHTML);
     }
 });
 
 document.getElementById("send_to_black").addEventListener("click", (event) => {
     if (isChosen()) {
-        if (piece_names.includes(choice.innerHTML)) spawnToBlack(choice.innerHTML);
+        if (choice.is_piece_name()) spawnToBlack(choice.innerHTML);
         else sendToBlack(choice.innerHTML);
     }
 });
 
 document.getElementById("send_to_rest").addEventListener("click", (event) => {
     if (isChosen()) {
-        if (piece_names.includes(choice.innerHTML)) console.log("called in vain");
+        if (choice.is_piece_name()) console.log("called in vain");
         else sendToRest(choice.innerHTML);
     }
 });

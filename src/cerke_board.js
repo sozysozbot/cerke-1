@@ -44,6 +44,9 @@ class Choice {
     get innerHTML() {
         return this._innerHTML;
     }
+    get value() {
+        return this._value;
+    }
     set value(value) {
         if (value === null) {
             document.getElementById("choice").innerHTML = this._innerHTML = "";
@@ -56,7 +59,7 @@ class Choice {
         }
     }
     is_piece_name() {
-        return typeof this._value === "string";
+        return piece_names.includes(this._innerHTML);
     }
 }
 const choice = new Choice();
@@ -74,7 +77,7 @@ function move(td) {
 function gain(target_id) {
     const piece = document.getElementById(choice.innerHTML);
     const target = document.getElementById(target_id);
-    if (piece === target || piece_names.includes(choice.innerHTML))
+    if (piece === target || choice.is_piece_name())
         return;
     piece.parentNode.removeChild(piece);
     target.parentNode.appendChild(piece);
@@ -211,7 +214,7 @@ for (let i = 0; i < row.length; i++) {
         }`;
         newtd.addEventListener("click", (event) => {
             if (event.target.tagName !== "IMG" && isChosen()) {
-                if (piece_names.includes(choice.innerHTML))
+                if (choice.is_piece_name())
                     spawn(newtd);
                 else
                     move(newtd);
@@ -223,7 +226,7 @@ for (let i = 0; i < row.length; i++) {
 // button
 document.getElementById("send_to_red").addEventListener("click", (event) => {
     if (isChosen()) {
-        if (piece_names.includes(choice.innerHTML))
+        if (choice.is_piece_name())
             spawnToRed(choice.innerHTML);
         else
             sendToRed(choice.innerHTML);
@@ -231,7 +234,7 @@ document.getElementById("send_to_red").addEventListener("click", (event) => {
 });
 document.getElementById("send_to_black").addEventListener("click", (event) => {
     if (isChosen()) {
-        if (piece_names.includes(choice.innerHTML))
+        if (choice.is_piece_name())
             spawnToBlack(choice.innerHTML);
         else
             sendToBlack(choice.innerHTML);
@@ -239,7 +242,7 @@ document.getElementById("send_to_black").addEventListener("click", (event) => {
 });
 document.getElementById("send_to_rest").addEventListener("click", (event) => {
     if (isChosen()) {
-        if (piece_names.includes(choice.innerHTML))
+        if (choice.is_piece_name())
             console.log("called in vain");
         else
             sendToRest(choice.innerHTML);
