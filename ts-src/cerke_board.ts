@@ -73,6 +73,10 @@ class Choice {
     is_piece_name(): boolean {
         return (piece_names as ReadonlyArray<string>).includes(this._innerHTML)
     }
+
+    piece_element(): HTMLElement {
+        return document.getElementById(this._innerHTML)
+    }
 }
 
 const choice = new Choice();
@@ -81,7 +85,7 @@ type ChoiceInnerHTMLType = string;
 
 // move the choice(=piece) to td(=grid)
 function move(td: HTMLTableDataCellElement) {
-    const piece = document.getElementById(choice.innerHTML);
+    const piece = choice.piece_element();
     piece.parentNode.removeChild(piece);
     td.appendChild(piece);
     choice.value = null;
@@ -95,7 +99,7 @@ function getNth(i: number) {
 }
 
 function gain(target_id: number) { // target is also piece
-    const piece = document.getElementById(choice.innerHTML);
+    const piece = choice.piece_element();
     const target = getNth(target_id);
     if (piece === target || choice.is_piece_name()) return;
 
@@ -109,7 +113,7 @@ function gain(target_id: number) { // target is also piece
 }
 
 function spawn(td: HTMLTableDataCellElement) {
-    const piece = document.getElementById(choice.innerHTML).firstChild;
+    const piece = choice.piece_element().firstChild;
     if (null == piece) { console.log("NPE"); return; }
 
     piece.parentNode.removeChild(piece);
@@ -121,7 +125,7 @@ function spawn(td: HTMLTableDataCellElement) {
 
 // functions on the button
 function rotate() {
-    if (choice.value !== null) document.getElementById(choice.innerHTML).classList.toggle("reverse");
+    if (choice.value !== null) choice.piece_element().classList.toggle("reverse");
     choice.value = null;
     console.log("rotate");
 }
@@ -168,19 +172,19 @@ function spawnTo(dest: "black" | "red", piece_id: ChoiceInnerHTMLType) {
     choice.value = null;
 }
 
-function spawnToBlack(piece_id: PieceImgName) {
-    const piece = document.getElementById(piece_id).firstChild;
+function spawnToBlack(piece_img_name: PieceImgName) {
+    const piece = document.getElementById(piece_img_name).firstChild;
     if (null == piece) { console.log("NPE"); return; }
-    else document.getElementById(`${piece_id}_num`).innerHTML = `${Number(document.getElementById(`${piece_id}_num`).innerHTML) - 1}`;
-    spawnTo("black", piece_id);
+    else document.getElementById(`${piece_img_name}_num`).innerHTML = `${Number(document.getElementById(`${piece_img_name}_num`).innerHTML) - 1}`;
+    spawnTo("black", piece_img_name);
 }
 
-function spawnToRed(piece_id: PieceImgName) {
-    const piece = document.getElementById(piece_id).firstChild;
+function spawnToRed(piece_img_name: PieceImgName) {
+    const piece = document.getElementById(piece_img_name).firstChild;
     if (null == piece) { console.log("NPE"); return; }
-    else document.getElementById(`${piece_id}_num`).innerHTML =  `${Number(document.getElementById(`${piece_id}_num`).innerHTML) - 1}`;
+    else document.getElementById(`${piece_img_name}_num`).innerHTML =  `${Number(document.getElementById(`${piece_img_name}_num`).innerHTML) - 1}`;
     (piece as HTMLImageElement).classList.add("reverse");
-    spawnTo("red", piece_id);
+    spawnTo("red", piece_img_name);
 }
 
 function ciurl() {
