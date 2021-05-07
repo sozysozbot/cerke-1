@@ -349,7 +349,7 @@ function fillPieceCell(num: number) {
     inner_img.addEventListener("click", () => {
         choice.innerHTML = new_val;
     });
-
+    td_img.innerHTML = "";
     td_img.appendChild(inner_img);
     
     // load num cells

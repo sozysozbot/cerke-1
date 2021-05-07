@@ -363,6 +363,7 @@ function fillPieceCell(num) {
     inner_img.addEventListener("click", () => {
         choice.innerHTML = new_val;
     });
+    td_img.innerHTML = "";
     td_img.appendChild(inner_img);
     // load num cells
     const td_num = document.getElementById(`${piece_names[num]}_num`);
