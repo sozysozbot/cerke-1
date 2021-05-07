@@ -19,8 +19,6 @@ const pieces = [
     "rtam", "bmun", "bmun", "bmun", "rmun", "rmun", "rmun",
     "bsaup", "bsaup", "rsaup", "rsaup"
 ];
-// hold places of pieces
-const places = pieces.map(() => "");
 const piece_names = [
     "bnuak", "rnuak",
     "bkauk", "rkauk",
@@ -71,7 +69,6 @@ function move(td) {
     const piece = document.getElementById(choice.innerHTML);
     piece.parentNode.removeChild(piece);
     td.appendChild(piece);
-    places[Number(piece.id)] = td.id;
     choice.value = null;
     console.log("move");
 }
@@ -120,7 +117,6 @@ function sendTo(dest, piece_id) {
     }
     piece.parentNode.removeChild(piece);
     destination.appendChild(piece);
-    places[piece_id] = dest;
     choice.value = null;
 }
 function sendToRed(piece_id) {
@@ -152,7 +148,6 @@ function spawnTo(dest, piece_id) {
     }
     piece.parentNode.removeChild(piece);
     destination.appendChild(piece);
-    places[piece_id] = dest;
     choice.value = null;
 }
 function spawnToBlack(piece_id) {
@@ -192,7 +187,6 @@ function init() {
             piece.classList.add("reverse");
         else
             piece.classList.remove("reverse");
-        places[i] = initial_coord_yhuap[i];
     }
     for (let i = 0; i < initial_coord_yhuap.length; i++) {
         document.getElementById(`${pieces[i]}_num`).innerHTML = `${0}`;
@@ -230,26 +224,30 @@ for (let i = 0; i < row.length; i++) {
 // button
 document.getElementById("send_to_red").addEventListener("click", (event) => {
     if (isChosen()) {
-        if (choice.is_piece_name())
-            spawnToRed(choice.innerHTML);
+        if (typeof choice.value === "string") {
+            spawnToRed(choice.value);
+        }
         else
             sendToRed(choice.innerHTML);
     }
 });
 document.getElementById("send_to_black").addEventListener("click", (event) => {
     if (isChosen()) {
-        if (choice.is_piece_name())
-            spawnToBlack(choice.innerHTML);
+        if (typeof choice.value === "string") {
+            spawnToBlack(choice.value);
+        }
         else
             sendToBlack(choice.innerHTML);
     }
 });
 document.getElementById("send_to_rest").addEventListener("click", (event) => {
     if (isChosen()) {
-        if (choice.is_piece_name())
+        if (typeof choice.value === "number") {
+            sendToRest(choice.value);
+        }
+        else {
             console.log("called in vain");
-        else
-            sendToRest(choice.innerHTML);
+        }
     }
 });
 // checkbox
@@ -299,7 +297,6 @@ for (let i = 0; i < pieces.length; i++) {
         else
             choice.value = i;
     });
-    places[i] = "rest";
 }
 // load piece list
 const piece_list = document.getElementById("piece_list");

@@ -31,9 +31,6 @@ const pieces: ReadonlyArray<PieceImgName> = [
     "bsaup", "bsaup", "rsaup", "rsaup"
 ];
 
-// hold places of pieces
-const places: string[] = pieces.map(() => "");
-
 const piece_names: ReadonlyArray<PieceImgName> = [
     "bnuak", "rnuak",
     "bkauk", "rkauk",
@@ -90,7 +87,6 @@ function move(td: HTMLTableDataCellElement) {
     const piece = document.getElementById(choice.innerHTML);
     piece.parentNode.removeChild(piece);
     td.appendChild(piece);
-    places[Number(piece.id)] = td.id;
     choice.value = null;
     console.log("move");
 }
@@ -140,7 +136,6 @@ function sendTo(dest: "red" | "black" | PieceImgName, piece_id: number | ChoiceI
 
     piece.parentNode.removeChild(piece);
     destination.appendChild(piece);
-    places[piece_id] = dest;
     choice.value = null;
 }
 
@@ -173,18 +168,17 @@ function spawnTo(dest: "black" | "red", piece_id: ChoiceInnerHTMLType) {
     if (dest !== "black" && dest !== "red" && destination.children.length !== 0) { console.log("already occupied"); return; }
     piece.parentNode.removeChild(piece);
     destination.appendChild(piece);
-    places[piece_id] = dest;
     choice.value = null;
 }
 
-function spawnToBlack(piece_id: ChoiceInnerHTMLType) {
+function spawnToBlack(piece_id: PieceImgName) {
     const piece = document.getElementById(piece_id).firstChild;
     if (null == piece) { console.log("NPE"); return; }
     else document.getElementById(`${piece_id}_num`).innerHTML = `${Number(document.getElementById(`${piece_id}_num`).innerHTML) - 1}`;
     spawnTo("black", piece_id);
 }
 
-function spawnToRed(piece_id: ChoiceInnerHTMLType) {
+function spawnToRed(piece_id: PieceImgName) {
     const piece = document.getElementById(piece_id).firstChild;
     if (null == piece) { console.log("NPE"); return; }
     else document.getElementById(`${piece_id}_num`).innerHTML =  `${Number(document.getElementById(`${piece_id}_num`).innerHTML) - 1}`;
@@ -205,7 +199,6 @@ function init() {
         document.getElementById(initial_coord_yhuap[i]).appendChild(piece);
         if (i < 24) piece.classList.add("reverse");
         else piece.classList.remove("reverse");
-        places[i] = initial_coord_yhuap[i];
     }
     for (let i = 0; i < initial_coord_yhuap.length; i++) {
         document.getElementById(`${pieces[i]}_num`).innerHTML = `${0}`;
@@ -245,22 +238,27 @@ for (let i = 0; i < row.length; i++) {
 // button
 document.getElementById("send_to_red").addEventListener("click", (event) => {
     if (isChosen()) {
-        if (choice.is_piece_name()) spawnToRed(choice.innerHTML);
-        else sendToRed(choice.innerHTML);
+        if (typeof choice.value === "string") {
+            spawnToRed(choice.value);
+        } else sendToRed(choice.innerHTML);
     }
 });
 
 document.getElementById("send_to_black").addEventListener("click", (event) => {
     if (isChosen()) {
-        if (choice.is_piece_name()) spawnToBlack(choice.innerHTML);
-        else sendToBlack(choice.innerHTML);
+        if (typeof choice.value === "string") {
+            spawnToBlack(choice.value);
+        } else sendToBlack(choice.innerHTML);
     }
 });
 
 document.getElementById("send_to_rest").addEventListener("click", (event) => {
     if (isChosen()) {
-        if (choice.is_piece_name()) console.log("called in vain");
-        else sendToRest(choice.innerHTML);
+        if (typeof choice.value === "number") {
+            sendToRest(choice.value);
+        } else {
+            console.log("called in vain");
+        }
     }
 });
 
@@ -300,7 +298,6 @@ for (let i = 0; i < pieces.length; i++) {
         if (isChosen()) gain(i);
         else choice.value = i;
     });
-    places[i] = "rest";
 }
 
 // load piece list
@@ -337,7 +334,7 @@ function fillPieceCell(num: number) {
     });
     td_img.innerHTML = "";
     td_img.appendChild(inner_img);
-    
+
     // load num cells
     const td_num = document.getElementById(`${piece_names[num]}_num`);
     td_num.innerHTML = `${document.getElementById(piece_names[num]).children.length}`;
