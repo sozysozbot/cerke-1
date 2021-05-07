@@ -58,6 +58,10 @@ const places = {
     53: "", // red mun
     54: "", // red mun
     55: "", // red mun
+    56: "", // black saup
+    57: "", // black saup
+    58: "", // red saup
+    59: "", // red saup
 };
 const initial_coord_yhuap = [
     "KA", "LA", "NA", "TA", "ZA", "XA", "CA", "MA", "PA",
@@ -77,6 +81,7 @@ const pieces = [
     "btuk", "bgua", "bdau", "rdau", "rgua", "rtuk",
     "rkua", "rmaun", "rkaun", "ruai", "bio", "buai", "bkaun", "bmaun", "bkua",
     "rtam", "bmun", "bmun", "bmun", "rmun", "rmun", "rmun",
+    "bsaup", "bsaup", "rsaup", "rsaup"
 ];
 const piece_names = [
     "bnuak", "rnuak",
@@ -90,7 +95,8 @@ const piece_names = [
     "buai", "ruai",
     "bio", "rio",
     "btam", "rtam",
-    "bmun", "rmun"
+    "bmun", "rmun",
+    "bsaup", "rsaup"
 ];
 const choice = document.getElementById("choice");
 
@@ -281,6 +287,12 @@ document.getElementById("mun_checkbox").addEventListener("change", () => {
     else { drainBlackMun(); drainRedMun(); }
 })
 
+document.getElementById("saup_checkbox").addEventListener("change", () => {
+    if (document.getElementById("saup_checkbox").checked) { generateBlackSaup(); generateRedSaup(); }
+    else { drainBlackSaup(); drainRedSaup(); }
+})
+
+
 // load rest
 for (let i = 0; i < piece_names.length; i++) {
     const rest = document.getElementById("rest");
@@ -308,8 +320,8 @@ const piece_list = document.getElementById("piece_list");
 for (let i = 0; i < 4; i++) {
     const tr_img = document.getElementById(`pl${i}`);
     const tr_num = document.getElementById(`pl${i + 4}`);
-    for (let j = 0; j < 6; j++) {
-        const num = i * 6 + j;
+    for (let j = 0; j < 7; j++) {
+        const num = i * 7 + j;
         // fill blank cells
         const newtd_img = document.createElement("td");
         tr_img.appendChild(newtd_img);
@@ -356,4 +368,17 @@ function drainBlackMun() {
 function drainRedMun() {
     sendToRest(53); sendToRest(54); sendToRest(55);
     drainPieceCell(23);
+}
+
+// saup
+function generateBlackSaup() { fillPieceCell(24); }
+function generateRedSaup() { fillPieceCell(25); }
+
+function drainBlackSaup() {
+    sendToRest(56); sendToRest(57);
+    drainPieceCell(24);
+}
+function drainRedSaup() {
+    sendToRest(58); sendToRest(59);
+    drainPieceCell(25);
 }
