@@ -39,9 +39,6 @@ class Choice {
         this._innerHTML = "";
         this._value = null;
     }
-    get innerHTML() {
-        return this._innerHTML;
-    }
     get value() {
         return this._value;
     }
@@ -65,12 +62,45 @@ class Choice {
     }
 }
 const choice = new Choice();
-function get_count(p) {
-    return Number(document.getElementById(`${p}_num`).innerHTML);
+class Count {
+    constructor(p) {
+        this._p = p;
+    }
+    get count() {
+        return Number(document.getElementById(`${this._p}_num`).innerHTML);
+    }
+    set count(value) {
+        document.getElementById(`${this._p}_num`).innerHTML = `${value}`;
+    }
 }
-function set_count(p, value) {
-    document.getElementById(`${p}_num`).innerHTML = `${value}`;
-}
+const piece_counts = {
+    bkua: new Count("bkua"),
+    bmaun: new Count("bmaun"),
+    bkaun: new Count("bkaun"),
+    buai: new Count("buai"),
+    rio: new Count("rio"),
+    ruai: new Count("ruai"),
+    rkaun: new Count("rkaun"),
+    rmaun: new Count("rmaun"),
+    rkua: new Count("rkua"),
+    rtuk: new Count("rtuk"),
+    rgua: new Count("rgua"),
+    rdau: new Count("rdau"),
+    bdau: new Count("bdau"),
+    bgua: new Count("bgua"),
+    btuk: new Count("btuk"),
+    bkauk: new Count("bkauk"),
+    rkauk: new Count("rkauk"),
+    rnuak: new Count("rnuak"),
+    btam: new Count("btam"),
+    bnuak: new Count("bnuak"),
+    bio: new Count("bio"),
+    rtam: new Count("rtam"),
+    bmun: new Count("bmun"),
+    rmun: new Count("rmun"),
+    bsaup: new Count("bsaup"),
+    rsaup: new Count("rsaup"),
+};
 // move the choice(=piece) to td(=grid)
 function move(td) {
     const piece = choice.piece_element();
@@ -85,7 +115,7 @@ function getNth(i) {
 function gain(target_id) {
     const piece = choice.piece_element();
     const target = getNth(target_id);
-    if (piece === target || choice.is_piece_name())
+    if (piece === target || typeof choice.value === "string")
         return;
     piece.parentNode.removeChild(piece);
     target.parentNode.appendChild(piece);
@@ -95,18 +125,6 @@ function gain(target_id) {
         sendToBlack(target_id);
     choice.value = null;
     console.log("gain");
-}
-function spawn(td) {
-    const piece = choice.piece_element().firstChild;
-    if (null == piece) {
-        console.log("NPE");
-        return;
-    }
-    piece.parentNode.removeChild(piece);
-    td.appendChild(piece);
-    document.getElementById(`${choice.innerHTML}_num`).innerHTML = `${Number(document.getElementById(`${choice.innerHTML}_num`).innerHTML) - 1}`;
-    choice.value = null;
-    console.log("spawn");
 }
 // functions on the button
 function rotate() {
@@ -149,10 +167,6 @@ function sendToRest(piece_id) {
 function spawnTo(dest, piece_id) {
     const destination = document.getElementById(dest);
     const piece = document.getElementById(piece_id).firstChild;
-    if (dest !== "black" && dest !== "red" && destination.children.length !== 0) {
-        console.log("already occupied");
-        return;
-    }
     piece.parentNode.removeChild(piece);
     destination.appendChild(piece);
     choice.value = null;
@@ -164,7 +178,7 @@ function spawnToBlack(piece_img_name) {
         return;
     }
     else
-        set_count(piece_img_name, get_count(piece_img_name) - 1);
+        piece_counts[piece_img_name].count -= 1;
     spawnTo("black", piece_img_name);
 }
 function spawnToRed(piece_img_name) {
@@ -174,7 +188,7 @@ function spawnToRed(piece_img_name) {
         return;
     }
     else
-        set_count(piece_img_name, get_count(piece_img_name) - 1);
+        piece_counts[piece_img_name].count -= 1;
     piece.classList.add("reverse");
     spawnTo("red", piece_img_name);
 }
@@ -196,7 +210,7 @@ function init() {
             piece.classList.remove("reverse");
     }
     for (let i = 0; i < initial_coord_yhuap.length; i++) {
-        set_count(pieces[i], 0);
+        piece_counts[pieces[i]].count = 0;
     }
     console.log("init");
 }
@@ -219,8 +233,18 @@ for (let i = 0; i < row.length; i++) {
         }`;
         newtd.addEventListener("click", (event) => {
             if (event.target.tagName !== "IMG" && choice.value !== null) {
-                if (choice.is_piece_name())
-                    spawn(newtd);
+                if (typeof choice.value === "string") {
+                    const piece = choice.piece_element().firstChild;
+                    if (null == piece) {
+                        console.log("NPE");
+                        return;
+                    }
+                    piece.parentNode.removeChild(piece);
+                    newtd.appendChild(piece);
+                    piece_counts[choice.value].count -= 1;
+                    choice.value = null;
+                    console.log("spawn");
+                }
                 else
                     move(newtd);
             }
@@ -339,7 +363,7 @@ function fillPieceCell(num) {
     td_img.innerHTML = "";
     td_img.appendChild(inner_img);
     // load num cells
-    set_count(piece_names[num], document.getElementById(piece_names[num]).children.length);
+    piece_counts[piece_names[num]].count = document.getElementById(piece_names[num]).children.length;
 }
 function drainPieceCell(num) {
     // drain img cells
