@@ -3,7 +3,8 @@
     "outDir": "./src",
     "allowJs": true,
     "target": "es2017",
-    "removeComments": false
+    "removeComments": false,
+    "noImplicitAny": true
   },
   "include": [
     "./ts-src/**/*"

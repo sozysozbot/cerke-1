@@ -104,7 +104,7 @@ const choice = document.getElementById("choice");
 function isChosen() { return choice.innerHTML !== ""; }
 
 // move the choice(=piece) to td(=grid)
-function move(td) {
+function move(td: HTMLTableDataCellElement) {
     const piece = document.getElementById(choice.innerHTML);
     piece.parentNode.removeChild(piece);
     td.appendChild(piece);
@@ -127,7 +127,7 @@ function gain(target_id) { // target is also piece
     console.log("gain");
 }
 
-function spawn(td) {
+function spawn(td: HTMLTableDataCellElement) {
     const piece = document.getElementById(choice.innerHTML).firstChild;
     if (null == piece) { console.log("NPE"); return; }
 
@@ -235,7 +235,7 @@ for (let i = 0; i < row.length; i++) {
     const table = document.getElementById("board") as HTMLTableElement;
     const newtr = table.insertRow(-1);
     for (let j = 0; j < column.length; j++) {
-        const newtd = newtr.insertCell(-1);
+        const newtd: HTMLTableDataCellElement = newtr.insertCell(-1);
         const newid = `${column[j]}${row[i]}`;
 
         newtd.id = newid;
