@@ -100,6 +100,8 @@ const piece_names = [
 ];
 const choice = document.getElementById("choice");
 
+type ChoiceInnerHTMLType = string;
+
 // return false when the choice is empty
 function isChosen() { return choice.innerHTML !== ""; }
 
@@ -113,7 +115,7 @@ function move(td: HTMLTableDataCellElement) {
     console.log("move");
 }
 
-function gain(target_id) { // target is also piece
+function gain(target_id: number) { // target is also piece
     const piece = document.getElementById(choice.innerHTML);
     const target = document.getElementById(target_id);
     if (piece === target || piece_names.includes(choice.innerHTML)) return;
@@ -156,21 +158,21 @@ function sendTo(dest, piece_id) {
     choice.innerHTML = "";
 }
 
-function sendToRed(piece_id) {
+function sendToRed(piece_id: number | ChoiceInnerHTMLType) {
     const piece = document.getElementById(piece_id);
     piece.classList.add("reverse");
     sendTo("red", piece_id);
     console.log("red");
 }
 
-function sendToBlack(piece_id) {
+function sendToBlack(piece_id: number | ChoiceInnerHTMLType) {
     const piece = document.getElementById(piece_id);
     piece.classList.remove("reverse");
     sendTo("black", piece_id);
     console.log("black");
 }
 
-function sendToRest(piece_id) {
+function sendToRest(piece_id: number | ChoiceInnerHTMLType) {
     const piece = document.getElementById(piece_id);
     const td_num = document.getElementById(`${pieces[piece_id]}_num`);
     piece.classList.remove("reverse");
@@ -179,7 +181,7 @@ function sendToRest(piece_id) {
     console.log("rest");
 }
 
-function spawnTo(dest, piece_id) {
+function spawnTo(dest: "black" | "red", piece_id: ChoiceInnerHTMLType) {
     const destination = document.getElementById(dest);
     const piece = document.getElementById(piece_id).firstChild;
     if (dest !== "black" && dest !== "red" && destination.children.length !== 0) { console.log("already occupied"); return; }
@@ -189,14 +191,14 @@ function spawnTo(dest, piece_id) {
     choice.innerHTML = "";
 }
 
-function spawnToBlack(piece_id) {
+function spawnToBlack(piece_id: ChoiceInnerHTMLType) {
     const piece = document.getElementById(piece_id).firstChild;
     if (null == piece) { console.log("NPE"); return; }
     else document.getElementById(`${piece_id}_num`).innerHTML = `${Number(document.getElementById(`${piece_id}_num`).innerHTML) - 1}`;
     spawnTo("black", piece_id);
 }
 
-function spawnToRed(piece_id) {
+function spawnToRed(piece_id: ChoiceInnerHTMLType) {
     const piece = document.getElementById(piece_id).firstChild;
     if (null == piece) { console.log("NPE"); return; }
     else document.getElementById(`${piece_id}_num`).innerHTML =  `${Number(document.getElementById(`${piece_id}_num`).innerHTML) - 1}`;
@@ -335,7 +337,7 @@ for (let i = 0; i < 4; i++) {
     }
 }
 
-function fillPieceCell(num) {
+function fillPieceCell(num: number) {
     // load img cells
     const td_img = document.getElementById(`${piece_names[num]}_img`);
     td_img.innerHTML = `<img src="./pieces/${piece_names[num]}.png" height="50" width="50" onclick="choice.innerHTML='${piece_names[num]}'"/>`;
@@ -344,7 +346,7 @@ function fillPieceCell(num) {
     td_num.innerHTML = `${document.getElementById(piece_names[num]).children.length}`;
 }
 
-function drainPieceCell(num) {
+function drainPieceCell(num: number) {
     // drain img cells
     const td_img = document.getElementById(`${piece_names[num]}_img`);
     td_img.innerHTML = "";
