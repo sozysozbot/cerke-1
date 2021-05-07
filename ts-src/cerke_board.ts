@@ -34,7 +34,7 @@ const pieces = [
 // hold places of pieces
 const places: string[] = pieces.map(() => "");
 
-const piece_names = [
+const piece_names: ReadonlyArray<PieceImgName> = [
     "bnuak", "rnuak",
     "bkauk", "rkauk",
     "bgua", "rgua",
@@ -56,11 +56,6 @@ class Choice {
 
     get innerHTML(): ChoiceInnerHTMLType {
         return this._innerHTML;
-    }
-
-    set innerHTML(value: string) {
-        this._innerHTML = value;
-        document.getElementById("choice").innerHTML = value;
     }
 
     set value(value: null | PieceImgName | number) {
@@ -91,7 +86,7 @@ function move(td: HTMLTableDataCellElement) {
     piece.parentNode.removeChild(piece);
     td.appendChild(piece);
     places[piece.id] = td.id;
-    choice.innerHTML = "";
+    choice.value = null;
     console.log("move");
 }
 
@@ -105,7 +100,7 @@ function gain(target_id: number) { // target is also piece
     if (piece.classList.contains("reverse")) sendToRed(target.id);
     else sendToBlack(target.id);
 
-    choice.innerHTML = "";
+    choice.value = null;
     console.log("gain");
 }
 
@@ -116,14 +111,14 @@ function spawn(td: HTMLTableDataCellElement) {
     piece.parentNode.removeChild(piece);
     td.appendChild(piece);
     document.getElementById(`${choice.innerHTML}_num`).innerHTML = `${Number(document.getElementById(`${choice.innerHTML}_num`).innerHTML) - 1}`;
-    choice.innerHTML = "";
+    choice.value = null;
     console.log("spawn");
 }
 
 // functions on the button
 function rotate() {
     if (isChosen()) document.getElementById(choice.innerHTML).classList.toggle("reverse");
-    choice.innerHTML = "";
+    choice.value = null;
     console.log("rotate");
 }
 
@@ -135,7 +130,7 @@ function sendTo(dest, piece_id) {
     piece.parentNode.removeChild(piece);
     destination.appendChild(piece);
     places[piece_id] = dest;
-    choice.innerHTML = "";
+    choice.value = null;
 }
 
 function sendToRed(piece_id: number | ChoiceInnerHTMLType) {
@@ -168,7 +163,7 @@ function spawnTo(dest: "black" | "red", piece_id: ChoiceInnerHTMLType) {
     piece.parentNode.removeChild(piece);
     destination.appendChild(piece);
     places[piece_id] = dest;
-    choice.innerHTML = "";
+    choice.value = null;
 }
 
 function spawnToBlack(piece_id: ChoiceInnerHTMLType) {
@@ -292,7 +287,7 @@ for (let i = 0; i < pieces.length; i++) {
     newimg.src = `./pieces/${pieces[i]}.png`;
     newimg.addEventListener("click", () => {
         if (isChosen()) gain(i);
-        else choice.innerHTML = `${i}`;
+        else choice.value = i;
     });
     places[i] = "rest";
 }
@@ -327,7 +322,7 @@ function fillPieceCell(num: number) {
     inner_img.width = 50;
     const new_val = piece_names[num];
     inner_img.addEventListener("click", () => {
-        choice.innerHTML = new_val;
+        choice.value = new_val;
     });
     td_img.innerHTML = "";
     td_img.appendChild(inner_img);

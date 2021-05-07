@@ -44,10 +44,6 @@ class Choice {
     get innerHTML() {
         return this._innerHTML;
     }
-    set innerHTML(value) {
-        this._innerHTML = value;
-        document.getElementById("choice").innerHTML = value;
-    }
     set value(value) {
         if (value === null) {
             document.getElementById("choice").innerHTML = this._innerHTML = "";
@@ -72,7 +68,7 @@ function move(td) {
     piece.parentNode.removeChild(piece);
     td.appendChild(piece);
     places[piece.id] = td.id;
-    choice.innerHTML = "";
+    choice.value = null;
     console.log("move");
 }
 function gain(target_id) {
@@ -86,7 +82,7 @@ function gain(target_id) {
         sendToRed(target.id);
     else
         sendToBlack(target.id);
-    choice.innerHTML = "";
+    choice.value = null;
     console.log("gain");
 }
 function spawn(td) {
@@ -98,14 +94,14 @@ function spawn(td) {
     piece.parentNode.removeChild(piece);
     td.appendChild(piece);
     document.getElementById(`${choice.innerHTML}_num`).innerHTML = `${Number(document.getElementById(`${choice.innerHTML}_num`).innerHTML) - 1}`;
-    choice.innerHTML = "";
+    choice.value = null;
     console.log("spawn");
 }
 // functions on the button
 function rotate() {
     if (isChosen())
         document.getElementById(choice.innerHTML).classList.toggle("reverse");
-    choice.innerHTML = "";
+    choice.value = null;
     console.log("rotate");
 }
 function sendTo(dest, piece_id) {
@@ -118,7 +114,7 @@ function sendTo(dest, piece_id) {
     piece.parentNode.removeChild(piece);
     destination.appendChild(piece);
     places[piece_id] = dest;
-    choice.innerHTML = "";
+    choice.value = null;
 }
 function sendToRed(piece_id) {
     const piece = document.getElementById(piece_id);
@@ -150,7 +146,7 @@ function spawnTo(dest, piece_id) {
     piece.parentNode.removeChild(piece);
     destination.appendChild(piece);
     places[piece_id] = dest;
-    choice.innerHTML = "";
+    choice.value = null;
 }
 function spawnToBlack(piece_id) {
     const piece = document.getElementById(piece_id).firstChild;
@@ -294,7 +290,7 @@ for (let i = 0; i < pieces.length; i++) {
         if (isChosen())
             gain(i);
         else
-            choice.innerHTML = `${i}`;
+            choice.value = i;
     });
     places[i] = "rest";
 }
@@ -327,7 +323,7 @@ function fillPieceCell(num) {
     inner_img.width = 50;
     const new_val = piece_names[num];
     inner_img.addEventListener("click", () => {
-        choice.innerHTML = new_val;
+        choice.value = new_val;
     });
     td_img.innerHTML = "";
     td_img.appendChild(inner_img);
