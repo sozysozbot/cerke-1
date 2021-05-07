@@ -131,7 +131,7 @@ function spawn(td) {
     }
     piece.parentNode.removeChild(piece);
     td.appendChild(piece);
-    document.getElementById(`${choice.innerHTML}_num`).innerHTML -= 1;
+    document.getElementById(`${choice.innerHTML}_num`).innerHTML = `${Number(document.getElementById(`${choice.innerHTML}_num`).innerHTML) - 1}`;
     choice.innerHTML = "";
     console.log("spawn");
 }
@@ -171,7 +171,7 @@ function sendToRest(piece_id) {
     const td_num = document.getElementById(`${pieces[piece_id]}_num`);
     piece.classList.remove("reverse");
     sendTo(pieces[piece_id], piece_id);
-    td_num.innerHTML = Number(td_num.innerHTML) + 1;
+    td_num.innerHTML = `${Number(td_num.innerHTML) + 1}`;
     console.log("rest");
 }
 function spawnTo(dest, piece_id) {
@@ -193,7 +193,7 @@ function spawnToBlack(piece_id) {
         return;
     }
     else
-        document.getElementById(`${piece_id}_num`).innerHTML -= 1;
+        document.getElementById(`${piece_id}_num`).innerHTML = `${Number(document.getElementById(`${piece_id}_num`).innerHTML) - 1}`;
     spawnTo("black", piece_id);
 }
 function spawnToRed(piece_id) {
@@ -203,7 +203,7 @@ function spawnToRed(piece_id) {
         return;
     }
     else
-        document.getElementById(`${piece_id}_num`).innerHTML -= 1;
+        document.getElementById(`${piece_id}_num`).innerHTML = `${Number(document.getElementById(`${piece_id}_num`).innerHTML) - 1}`;
     piece.classList.add("reverse");
     spawnTo("red", piece_id);
 }
@@ -216,7 +216,7 @@ function ciurl() {
 }
 function init() {
     for (let i = 0; i < initial_coord_yhuap.length; i++) {
-        const piece = document.getElementById(i);
+        const piece = document.getElementById(`${i}`);
         piece.parentNode.removeChild(piece);
         document.getElementById(initial_coord_yhuap[i]).appendChild(piece);
         if (i < 24)
@@ -226,7 +226,7 @@ function init() {
         places[i] = initial_coord_yhuap[i];
     }
     for (let i = 0; i < initial_coord_yhuap.length; i++) {
-        document.getElementById(`${pieces[i]}_num`).innerHTML = 0;
+        document.getElementById(`${pieces[i]}_num`).innerHTML = `${0}`;
     }
     console.log("init");
 }
@@ -322,13 +322,13 @@ for (let i = 0; i < pieces.length; i++) {
     const newimg = document.createElement("img");
     document.getElementById(pieces[i]).appendChild(newimg);
     newimg.className = "piece";
-    newimg.id = i;
+    newimg.id = `${i}`;
     newimg.src = `./pieces/${pieces[i]}.png`;
     newimg.addEventListener("click", () => {
         if (isChosen())
             gain(i);
         else
-            choice.innerHTML = i;
+            choice.innerHTML = `${i}`;
     });
     places[i] = "rest";
 }
@@ -358,7 +358,7 @@ function fillPieceCell(num) {
     td_img.innerHTML = `<img src="./pieces/${piece_names[num]}.png" height="50" width="50" onclick="choice.innerHTML='${piece_names[num]}'"/>`;
     // load num cells
     const td_num = document.getElementById(`${piece_names[num]}_num`);
-    td_num.innerHTML = document.getElementById(piece_names[num]).children.length;
+    td_num.innerHTML = `${document.getElementById(piece_names[num]).children.length}`;
 }
 function drainPieceCell(num) {
     // drain img cells
