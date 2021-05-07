@@ -62,8 +62,6 @@ class Choice {
     }
 }
 const choice = new Choice();
-// return false when the choice is empty
-function isChosen() { return choice.innerHTML !== ""; }
 // move the choice(=piece) to td(=grid)
 function move(td) {
     const piece = document.getElementById(choice.innerHTML);
@@ -83,9 +81,9 @@ function gain(target_id) {
     piece.parentNode.removeChild(piece);
     target.parentNode.appendChild(piece);
     if (piece.classList.contains("reverse"))
-        sendToRed(target.id);
+        sendToRed(target_id);
     else
-        sendToBlack(target.id);
+        sendToBlack(target_id);
     choice.value = null;
     console.log("gain");
 }
@@ -103,14 +101,14 @@ function spawn(td) {
 }
 // functions on the button
 function rotate() {
-    if (isChosen())
+    if (choice.value !== null)
         document.getElementById(choice.innerHTML).classList.toggle("reverse");
     choice.value = null;
     console.log("rotate");
 }
 function sendTo(dest, piece_id) {
     const destination = document.getElementById(dest);
-    const piece = document.getElementById(piece_id);
+    const piece = getNth(piece_id);
     if (null == piece) {
         console.log("NPE");
         return;
@@ -120,13 +118,13 @@ function sendTo(dest, piece_id) {
     choice.value = null;
 }
 function sendToRed(piece_id) {
-    const piece = document.getElementById(piece_id);
+    const piece = getNth(piece_id);
     piece.classList.add("reverse");
     sendTo("red", piece_id);
     console.log("red");
 }
 function sendToBlack(piece_id) {
-    const piece = document.getElementById(piece_id);
+    const piece = getNth(piece_id);
     piece.classList.remove("reverse");
     sendTo("black", piece_id);
     console.log("black");
@@ -211,7 +209,7 @@ for (let i = 0; i < row.length; i++) {
         }${newid === "ZO" ? " tanzo" : "" // add tanzo class
         }`;
         newtd.addEventListener("click", (event) => {
-            if (event.target.tagName !== "IMG" && isChosen()) {
+            if (event.target.tagName !== "IMG" && choice.value !== null) {
                 if (choice.is_piece_name())
                     spawn(newtd);
                 else
@@ -223,25 +221,25 @@ for (let i = 0; i < row.length; i++) {
 // set console function
 // button
 document.getElementById("send_to_red").addEventListener("click", (event) => {
-    if (isChosen()) {
+    if (choice.value !== null) {
         if (typeof choice.value === "string") {
             spawnToRed(choice.value);
         }
         else
-            sendToRed(choice.innerHTML);
+            sendToRed(choice.value);
     }
 });
 document.getElementById("send_to_black").addEventListener("click", (event) => {
-    if (isChosen()) {
+    if (choice.value !== null) {
         if (typeof choice.value === "string") {
             spawnToBlack(choice.value);
         }
         else
-            sendToBlack(choice.innerHTML);
+            sendToBlack(choice.value);
     }
 });
 document.getElementById("send_to_rest").addEventListener("click", (event) => {
-    if (isChosen()) {
+    if (choice.value !== null) {
         if (typeof choice.value === "number") {
             sendToRest(choice.value);
         }
@@ -292,7 +290,7 @@ for (let i = 0; i < pieces.length; i++) {
     newimg.id = `${i}`;
     newimg.src = `./pieces/${pieces[i]}.png`;
     newimg.addEventListener("click", () => {
-        if (isChosen())
+        if (choice.value !== null)
             gain(i);
         else
             choice.value = i;

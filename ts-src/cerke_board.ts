@@ -79,9 +79,6 @@ const choice = new Choice();
 
 type ChoiceInnerHTMLType = string;
 
-// return false when the choice is empty
-function isChosen() { return choice.innerHTML !== ""; }
-
 // move the choice(=piece) to td(=grid)
 function move(td: HTMLTableDataCellElement) {
     const piece = document.getElementById(choice.innerHTML);
@@ -91,7 +88,7 @@ function move(td: HTMLTableDataCellElement) {
     console.log("move");
 }
 
-type TargetDotId = string;
+type TargetDotId = number;
 
 function getNth(i: number) {
     return document.getElementById(`${i}`);
@@ -104,8 +101,8 @@ function gain(target_id: number) { // target is also piece
 
     piece.parentNode.removeChild(piece);
     target.parentNode.appendChild(piece);
-    if (piece.classList.contains("reverse")) sendToRed(target.id);
-    else sendToBlack(target.id);
+    if (piece.classList.contains("reverse")) sendToRed(target_id);
+    else sendToBlack(target_id);
 
     choice.value = null;
     console.log("gain");
@@ -124,14 +121,14 @@ function spawn(td: HTMLTableDataCellElement) {
 
 // functions on the button
 function rotate() {
-    if (isChosen()) document.getElementById(choice.innerHTML).classList.toggle("reverse");
+    if (choice.value !== null) document.getElementById(choice.innerHTML).classList.toggle("reverse");
     choice.value = null;
     console.log("rotate");
 }
 
-function sendTo(dest: "red" | "black" | PieceImgName, piece_id: number | ChoiceInnerHTMLType) {
+function sendTo(dest: "red" | "black" | PieceImgName, piece_id: number) {
     const destination = document.getElementById(dest);
-    const piece = document.getElementById(piece_id);
+    const piece = getNth(piece_id);
     if (null == piece) { console.log("NPE"); return; }
 
     piece.parentNode.removeChild(piece);
@@ -139,15 +136,15 @@ function sendTo(dest: "red" | "black" | PieceImgName, piece_id: number | ChoiceI
     choice.value = null;
 }
 
-function sendToRed(piece_id: TargetDotId | ChoiceInnerHTMLType) {
-    const piece = document.getElementById(piece_id);
+function sendToRed(piece_id: number) {
+    const piece = getNth(piece_id);
     piece.classList.add("reverse");
     sendTo("red", piece_id);
     console.log("red");
 }
 
-function sendToBlack(piece_id: TargetDotId | ChoiceInnerHTMLType) {
-    const piece = document.getElementById(piece_id);
+function sendToBlack(piece_id: number) {
+    const piece = getNth(piece_id);
     piece.classList.remove("reverse");
     sendTo("black", piece_id);
     console.log("black");
@@ -226,7 +223,7 @@ for (let i = 0; i < row.length; i++) {
             }${newid === "ZO" ? " tanzo" : "" // add tanzo class
             }`;
         newtd.addEventListener("click", (event) => {
-            if ((event.target as HTMLElement).tagName !== "IMG" && isChosen()) {
+            if ((event.target as HTMLElement).tagName !== "IMG" && choice.value !== null) {
                 if (choice.is_piece_name()) spawn(newtd);
                 else move(newtd);
             }
@@ -237,23 +234,23 @@ for (let i = 0; i < row.length; i++) {
 // set console function
 // button
 document.getElementById("send_to_red").addEventListener("click", (event) => {
-    if (isChosen()) {
+    if (choice.value !== null) {
         if (typeof choice.value === "string") {
             spawnToRed(choice.value);
-        } else sendToRed(choice.innerHTML);
+        } else sendToRed(choice.value);
     }
 });
 
 document.getElementById("send_to_black").addEventListener("click", (event) => {
-    if (isChosen()) {
+    if (choice.value !== null) {
         if (typeof choice.value === "string") {
             spawnToBlack(choice.value);
-        } else sendToBlack(choice.innerHTML);
+        } else sendToBlack(choice.value);
     }
 });
 
 document.getElementById("send_to_rest").addEventListener("click", (event) => {
-    if (isChosen()) {
+    if (choice.value !== null) {
         if (typeof choice.value === "number") {
             sendToRest(choice.value);
         } else {
@@ -295,7 +292,7 @@ for (let i = 0; i < pieces.length; i++) {
     newimg.id = `${i}`;
     newimg.src = `./pieces/${pieces[i]}.png`;
     newimg.addEventListener("click", () => {
-        if (isChosen()) gain(i);
+        if (choice.value !== null) gain(i);
         else choice.value = i;
     });
 }
