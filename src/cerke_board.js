@@ -60,11 +60,20 @@ class Choice {
     is_piece_name() {
         return piece_names.includes(this._innerHTML);
     }
+    piece_element() {
+        return document.getElementById(this._innerHTML);
+    }
 }
 const choice = new Choice();
+function get_count(p) {
+    return Number(document.getElementById(`${p}_num`).innerHTML);
+}
+function set_count(p, value) {
+    document.getElementById(`${p}_num`).innerHTML = `${value}`;
+}
 // move the choice(=piece) to td(=grid)
 function move(td) {
-    const piece = document.getElementById(choice.innerHTML);
+    const piece = choice.piece_element();
     piece.parentNode.removeChild(piece);
     td.appendChild(piece);
     choice.value = null;
@@ -74,7 +83,7 @@ function getNth(i) {
     return document.getElementById(`${i}`);
 }
 function gain(target_id) {
-    const piece = document.getElementById(choice.innerHTML);
+    const piece = choice.piece_element();
     const target = getNth(target_id);
     if (piece === target || choice.is_piece_name())
         return;
@@ -88,7 +97,7 @@ function gain(target_id) {
     console.log("gain");
 }
 function spawn(td) {
-    const piece = document.getElementById(choice.innerHTML).firstChild;
+    const piece = choice.piece_element().firstChild;
     if (null == piece) {
         console.log("NPE");
         return;
@@ -102,7 +111,7 @@ function spawn(td) {
 // functions on the button
 function rotate() {
     if (choice.value !== null)
-        document.getElementById(choice.innerHTML).classList.toggle("reverse");
+        choice.piece_element().classList.toggle("reverse");
     choice.value = null;
     console.log("rotate");
 }
@@ -148,26 +157,26 @@ function spawnTo(dest, piece_id) {
     destination.appendChild(piece);
     choice.value = null;
 }
-function spawnToBlack(piece_id) {
-    const piece = document.getElementById(piece_id).firstChild;
+function spawnToBlack(piece_img_name) {
+    const piece = document.getElementById(piece_img_name).firstChild;
     if (null == piece) {
         console.log("NPE");
         return;
     }
     else
-        document.getElementById(`${piece_id}_num`).innerHTML = `${Number(document.getElementById(`${piece_id}_num`).innerHTML) - 1}`;
-    spawnTo("black", piece_id);
+        set_count(piece_img_name, get_count(piece_img_name) - 1);
+    spawnTo("black", piece_img_name);
 }
-function spawnToRed(piece_id) {
-    const piece = document.getElementById(piece_id).firstChild;
+function spawnToRed(piece_img_name) {
+    const piece = document.getElementById(piece_img_name).firstChild;
     if (null == piece) {
         console.log("NPE");
         return;
     }
     else
-        document.getElementById(`${piece_id}_num`).innerHTML = `${Number(document.getElementById(`${piece_id}_num`).innerHTML) - 1}`;
+        set_count(piece_img_name, get_count(piece_img_name) - 1);
     piece.classList.add("reverse");
-    spawnTo("red", piece_id);
+    spawnTo("red", piece_img_name);
 }
 function ciurl() {
     let rand = 0;
@@ -187,7 +196,7 @@ function init() {
             piece.classList.remove("reverse");
     }
     for (let i = 0; i < initial_coord_yhuap.length; i++) {
-        document.getElementById(`${pieces[i]}_num`).innerHTML = `${0}`;
+        set_count(pieces[i], 0);
     }
     console.log("init");
 }
@@ -330,8 +339,7 @@ function fillPieceCell(num) {
     td_img.innerHTML = "";
     td_img.appendChild(inner_img);
     // load num cells
-    const td_num = document.getElementById(`${piece_names[num]}_num`);
-    td_num.innerHTML = `${document.getElementById(piece_names[num]).children.length}`;
+    set_count(piece_names[num], document.getElementById(piece_names[num]).children.length);
 }
 function drainPieceCell(num) {
     // drain img cells

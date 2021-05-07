@@ -81,6 +81,14 @@ class Choice {
 
 const choice = new Choice();
 
+function get_count(p: PieceImgName): number {
+    return Number(document.getElementById(`${p}_num`).innerHTML)
+}
+
+function set_count(p: PieceImgName, value: number): void {
+    document.getElementById(`${p}_num`).innerHTML = `${value}`
+}
+
 type ChoiceInnerHTMLType = string;
 
 // move the choice(=piece) to td(=grid)
@@ -175,14 +183,14 @@ function spawnTo(dest: "black" | "red", piece_id: ChoiceInnerHTMLType) {
 function spawnToBlack(piece_img_name: PieceImgName) {
     const piece = document.getElementById(piece_img_name).firstChild;
     if (null == piece) { console.log("NPE"); return; }
-    else document.getElementById(`${piece_img_name}_num`).innerHTML = `${Number(document.getElementById(`${piece_img_name}_num`).innerHTML) - 1}`;
+    else set_count(piece_img_name, get_count(piece_img_name) - 1);
     spawnTo("black", piece_img_name);
 }
 
 function spawnToRed(piece_img_name: PieceImgName) {
     const piece = document.getElementById(piece_img_name).firstChild;
     if (null == piece) { console.log("NPE"); return; }
-    else document.getElementById(`${piece_img_name}_num`).innerHTML =  `${Number(document.getElementById(`${piece_img_name}_num`).innerHTML) - 1}`;
+    else set_count(piece_img_name, get_count(piece_img_name) - 1);
     (piece as HTMLImageElement).classList.add("reverse");
     spawnTo("red", piece_img_name);
 }
@@ -202,7 +210,7 @@ function init() {
         else piece.classList.remove("reverse");
     }
     for (let i = 0; i < initial_coord_yhuap.length; i++) {
-        document.getElementById(`${pieces[i]}_num`).innerHTML = `${0}`;
+        set_count(pieces[i], 0);
     }
     console.log("init");
 }
@@ -337,8 +345,7 @@ function fillPieceCell(num: number) {
     td_img.appendChild(inner_img);
 
     // load num cells
-    const td_num = document.getElementById(`${piece_names[num]}_num`);
-    td_num.innerHTML = `${document.getElementById(piece_names[num]).children.length}`;
+    set_count(piece_names[num], document.getElementById(piece_names[num]).children.length);
 }
 
 function drainPieceCell(num: number) {
