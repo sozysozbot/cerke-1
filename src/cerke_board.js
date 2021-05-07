@@ -48,6 +48,7 @@ class Choice {
         return this._value;
     }
     set value(value) {
+        this._value = value;
         if (value === null) {
             document.getElementById("choice").innerHTML = this._innerHTML = "";
         }
@@ -70,13 +71,16 @@ function move(td) {
     const piece = document.getElementById(choice.innerHTML);
     piece.parentNode.removeChild(piece);
     td.appendChild(piece);
-    places[piece.id] = td.id;
+    places[Number(piece.id)] = td.id;
     choice.value = null;
     console.log("move");
 }
+function getNth(i) {
+    return document.getElementById(`${i}`);
+}
 function gain(target_id) {
     const piece = document.getElementById(choice.innerHTML);
-    const target = document.getElementById(target_id);
+    const target = getNth(target_id);
     if (piece === target || choice.is_piece_name())
         return;
     piece.parentNode.removeChild(piece);
@@ -132,7 +136,7 @@ function sendToBlack(piece_id) {
     console.log("black");
 }
 function sendToRest(piece_id) {
-    const piece = document.getElementById(piece_id);
+    const piece = getNth(piece_id);
     const td_num = document.getElementById(`${pieces[piece_id]}_num`);
     piece.classList.remove("reverse");
     sendTo(pieces[piece_id], piece_id);

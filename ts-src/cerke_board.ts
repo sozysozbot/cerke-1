@@ -19,7 +19,7 @@ const initial_coord_yhuap = [
     "KAU", "LAU", "TAU", "XAU", "MAU", "PAU",
     "KIA", "LIA", "NIA", "TIA", "ZIA", "XIA", "CIA", "MIA", "PIA",
 ];
-const pieces = [
+const pieces: ReadonlyArray<PieceImgName> = [
     "bkua", "bmaun", "bkaun", "buai", "rio", "ruai", "rkaun", "rmaun", "rkua",
     "rtuk", "rgua", "rdau", "bdau", "bgua", "btuk",
     "bkauk", "rkauk", "bkauk", "rkauk", "rnuak", "rkauk", "bkauk", "rkauk", "bkauk",
@@ -63,6 +63,7 @@ class Choice {
     }
 
     set value(value: null | PieceImgName | number) {
+        this._value = value;
         if (value === null) {
             document.getElementById("choice").innerHTML = this._innerHTML = "";
         } else if (typeof value === "number") {
@@ -89,14 +90,20 @@ function move(td: HTMLTableDataCellElement) {
     const piece = document.getElementById(choice.innerHTML);
     piece.parentNode.removeChild(piece);
     td.appendChild(piece);
-    places[piece.id] = td.id;
+    places[Number(piece.id)] = td.id;
     choice.value = null;
     console.log("move");
 }
 
+type TargetDotId = string;
+
+function getNth(i: number) {
+    return document.getElementById(`${i}`);
+}
+
 function gain(target_id: number) { // target is also piece
     const piece = document.getElementById(choice.innerHTML);
-    const target = document.getElementById(target_id);
+    const target = getNth(target_id);
     if (piece === target || choice.is_piece_name()) return;
 
     piece.parentNode.removeChild(piece);
@@ -126,7 +133,7 @@ function rotate() {
     console.log("rotate");
 }
 
-function sendTo(dest, piece_id) {
+function sendTo(dest: "red" | "black" | PieceImgName, piece_id: number | ChoiceInnerHTMLType) {
     const destination = document.getElementById(dest);
     const piece = document.getElementById(piece_id);
     if (null == piece) { console.log("NPE"); return; }
@@ -137,22 +144,22 @@ function sendTo(dest, piece_id) {
     choice.value = null;
 }
 
-function sendToRed(piece_id: number | ChoiceInnerHTMLType) {
+function sendToRed(piece_id: TargetDotId | ChoiceInnerHTMLType) {
     const piece = document.getElementById(piece_id);
     piece.classList.add("reverse");
     sendTo("red", piece_id);
     console.log("red");
 }
 
-function sendToBlack(piece_id: number | ChoiceInnerHTMLType) {
+function sendToBlack(piece_id: TargetDotId | ChoiceInnerHTMLType) {
     const piece = document.getElementById(piece_id);
     piece.classList.remove("reverse");
     sendTo("black", piece_id);
     console.log("black");
 }
 
-function sendToRest(piece_id: number | ChoiceInnerHTMLType) {
-    const piece = document.getElementById(piece_id);
+function sendToRest(piece_id: number) {
+    const piece = getNth(piece_id);
     const td_num = document.getElementById(`${pieces[piece_id]}_num`);
     piece.classList.remove("reverse");
     sendTo(pieces[piece_id], piece_id);
