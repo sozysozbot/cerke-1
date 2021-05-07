@@ -340,7 +340,18 @@ for (let i = 0; i < 4; i++) {
 function fillPieceCell(num: number) {
     // load img cells
     const td_img = document.getElementById(`${piece_names[num]}_img`);
-    td_img.innerHTML = `<img src="./pieces/${piece_names[num]}.png" height="50" width="50" onclick="choice.innerHTML='${piece_names[num]}'"/>`;
+
+    const inner_img = document.createElement("img");
+    inner_img.src = `./pieces/${piece_names[num]}.png`;
+    inner_img.height = 50;
+    inner_img.width = 50;
+    const new_val = piece_names[num];
+    inner_img.addEventListener("click", () => {
+        choice.innerHTML = new_val;
+    });
+
+    td_img.appendChild(inner_img);
+    
     // load num cells
     const td_num = document.getElementById(`${piece_names[num]}_num`);
     td_num.innerHTML = `${document.getElementById(piece_names[num]).children.length}`;
