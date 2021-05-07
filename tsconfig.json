@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "outDir": "./src",
+    "allowJs": true,
+    "target": "es2017",
+    "removeComments": false
+  },
+  "include": [
+    "./ts-src/**/*"
+  ]
+}
