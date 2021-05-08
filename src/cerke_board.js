@@ -81,9 +81,10 @@ class Count {
         this._p = p;
     }
     get count() {
-        return Number(document.getElementById(`${this._p}_num`).innerHTML);
+        return this._count;
     }
     set count(value) {
+        this._count = value;
         document.getElementById(`${this._p}_num`).innerHTML = `${value}`;
     }
 }

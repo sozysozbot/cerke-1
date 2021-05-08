@@ -90,13 +90,15 @@ const choice = new Choice();
 
 class Count {
     private _p: PieceImgName
+    private _count: number
     constructor(p: PieceImgName) {
         this._p = p;
     }
     get count(): number {
-        return Number(document.getElementById(`${this._p}_num`).innerHTML)
+        return this._count;
     }
     set count(value: number) {
+        this._count = value;
         document.getElementById(`${this._p}_num`).innerHTML = `${value}`
     }
 }
