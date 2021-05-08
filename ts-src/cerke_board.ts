@@ -48,7 +48,6 @@ const piece_names: ReadonlyArray<PieceImgName> = [
 ];
 
 class Choice {
-    private _innerHTML: string = "";
     private _value: null | PieceImgName | number = null;
 
     get value(): null | PieceImgName | number {
@@ -60,23 +59,30 @@ class Choice {
         if (typeof this._value === "number") {
             document.getElementById(`${this._value}`).classList.remove("blinking");
         } else if (typeof this._value === "string") {
-            document.getElementById(this._value).classList.remove("blinking");
+            (document.getElementById(`${this._value}_img`).childNodes[0] as HTMLImageElement).classList.remove("blinking");
         }
 
         this._value = new_value;
         if (new_value === null) {
-            document.getElementById("choice").innerHTML = this._innerHTML = "";
+            document.getElementById("choice").innerHTML = "";
         } else if (typeof new_value === "number") {
-            document.getElementById("choice").innerHTML = this._innerHTML = `${new_value}`;
-            document.getElementById(this._innerHTML).classList.add("blinking");
+            document.getElementById("choice").innerHTML = `${new_value}`;
+            document.getElementById(`${new_value}`).classList.add("blinking");
         } else {
-            document.getElementById("choice").innerHTML = this._innerHTML = new_value;
-            document.getElementById(this._innerHTML).classList.add("blinking");
+            document.getElementById("choice").innerHTML = new_value;
+            (document.getElementById(`${new_value}_img`).childNodes[0] as HTMLImageElement).classList.add("blinking");
         }
     }
 
     piece_element(): HTMLElement {
-        return document.getElementById(this._innerHTML)
+        if (this._value === null) {
+            console.log("NULL!!!!");
+            return document.getElementById("");
+        } else if (typeof this._value === "string") {
+            return document.getElementById(this._value);
+        } else if (typeof this._value === "number") {
+            return document.getElementById(`${this._value}`);
+        }
     }
 }
 
