@@ -58,8 +58,11 @@ class Choice {
             document.getElementById(`${new_value}`).classList.add("blinking");
         }
         else {
-            document.getElementById("choice").innerHTML = new_value;
-            document.getElementById(`${new_value}_img`).childNodes[0].classList.add("blinking");
+            // If there is no more piece, making it unselectable is less confusing
+            if (piece_counts[new_value].count > 0) {
+                document.getElementById("choice").innerHTML = new_value;
+                document.getElementById(`${new_value}_img`).childNodes[0].classList.add("blinking");
+            }
         }
     }
     piece_element() {
