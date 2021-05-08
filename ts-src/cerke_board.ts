@@ -55,14 +55,23 @@ class Choice {
         return this._value;
     }
 
-    set value(value: null | PieceImgName | number) {
-        this._value = value;
-        if (value === null) {
+    set value(new_value: null | PieceImgName | number) {
+        // remove old blinking
+        if (typeof this._value === "number") {
+            document.getElementById(`${this._value}`).classList.remove("blinking");
+        } else if (typeof this._value === "string") {
+            document.getElementById(this._value).classList.remove("blinking");
+        }
+
+        this._value = new_value;
+        if (new_value === null) {
             document.getElementById("choice").innerHTML = this._innerHTML = "";
-        } else if (typeof value === "number") {
-            document.getElementById("choice").innerHTML = this._innerHTML = `${value}`;
+        } else if (typeof new_value === "number") {
+            document.getElementById("choice").innerHTML = this._innerHTML = `${new_value}`;
+            document.getElementById(this._innerHTML).classList.add("blinking");
         } else {
-            document.getElementById("choice").innerHTML = this._innerHTML = value;
+            document.getElementById("choice").innerHTML = this._innerHTML = new_value;
+            document.getElementById(this._innerHTML).classList.add("blinking");
         }
     }
 
