@@ -107,3 +107,16 @@ table{
 .tanzo{
     background-color: #536b53;
 }
+
+.blinking {
+    margin: -5px;
+    border: 5px solid #9ae2ff;
+    animation-name: blinking;
+    animation-duration: 1s;
+    animation-iteration-count: 100;
+}
+@keyframes blinking {
+    50% {
+        border-color: #ffcd5f;
+    }
+}
