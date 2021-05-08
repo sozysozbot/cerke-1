@@ -225,11 +225,16 @@ for (let i = 0; i < row.length; i++) {
         const newtd = newtr.insertCell(-1);
         const newid = `${column[j]}${row[i]}`;
         newtd.id = newid;
-        newtd.className = `cell
-            ${tarfe.includes(newid) ? " tarfe" : "" // add tarfe class
-        }${tanna.includes(newid) ? " tanna" : "" // add tanna class
-        }${newid === "ZO" ? " tanzo" : "" // add tanzo class
-        }`;
+        newtd.classList.add("cell");
+        if (tarfe.includes(newid)) {
+            newtd.classList.add("tarfe");
+        }
+        else if (tanna.includes(newid)) {
+            newtd.classList.add("tanna");
+        }
+        else if (newid === "ZO") {
+            newtd.classList.add("tanzo");
+        }
         newtd.addEventListener("click", (event) => {
             if (event.target.tagName !== "IMG" && choice.value !== null) {
                 if (typeof choice.value === "string") {

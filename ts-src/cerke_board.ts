@@ -232,9 +232,12 @@ function cancelChoice() {
     choice.value = null;
 }
 
+type Column = "K" | "L" | "N" | "T" | "Z" | "X" | "C" | "M" | "P";
+type Row = "A" | "E" | "I" | "U" | "O" | "Y" | "AI" | "AU" | "IA";
+
 // load board
-const column = ["K", "L", "N", "T", "Z", "X", "C", "M", "P"];
-const row = ["A", "E", "I", "U", "O", "Y", "AI", "AU", "IA"];
+const column: ReadonlyArray<Column> = ["K", "L", "N", "T", "Z", "X", "C", "M", "P"];
+const row: ReadonlyArray<Row> = ["A", "E", "I", "U", "O", "Y", "AI", "AU", "IA"];
 const tanna = ["ZI", "ZU", "NO", "TO", "XO", "CO", "ZY", "ZAI"];
 const tarfe = ["NI", "CI", "TU", "XU", "TY", "XY", "NAI", "CAI"];
 
@@ -246,11 +249,15 @@ for (let i = 0; i < row.length; i++) {
         const newid = `${column[j]}${row[i]}`;
 
         newtd.id = newid;
-        newtd.className = `cell
-            ${tarfe.includes(newid) ? " tarfe" : "" // add tarfe class
-            }${tanna.includes(newid) ? " tanna" : "" // add tanna class
-            }${newid === "ZO" ? " tanzo" : "" // add tanzo class
-            }`;
+        newtd.classList.add("cell");
+        if (tarfe.includes(newid)) {
+            newtd.classList.add("tarfe");
+        } else if (tanna.includes(newid)) {
+            newtd.classList.add("tanna");
+        } else if (newid === "ZO") {
+            newtd.classList.add("tanzo");
+        }
+
         newtd.addEventListener("click", (event) => {
             if ((event.target as HTMLElement).tagName !== "IMG" && choice.value !== null) {
                 if (typeof choice.value === "string") {
