@@ -228,6 +228,10 @@ function init() {
     console.log("init");
 }
 
+function cancelChoice() {
+    choice.value = null;
+}
+
 // load board
 const column = ["K", "L", "N", "T", "Z", "X", "C", "M", "P"];
 const row = ["A", "E", "I", "U", "O", "Y", "AI", "AU", "IA"];
